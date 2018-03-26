@@ -1,0 +1,1 @@
+/home/erikas/repos/OS.git/trunk/ConsoleApplication1/obj/Debug/.NETFramework,Version=v4.5.2.AssemblyAttribute.cs

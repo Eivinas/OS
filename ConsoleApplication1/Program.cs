@@ -73,117 +73,162 @@ namespace OS_Test2
         {
             switch (a)
             {
-                case 1:
-                    Console.WriteLine("Vykdoma komanda GIV");
-                    if (zodis1 > -1)
-                        RealiMasina.memory[zodis1] = zodis2; //Cia GIV i rasoma i memory reiksme
-                    else
-                        Console.WriteLine("Priskiriama registro reiksme"); //Cia GIV i rasoma i registra reiksme (dabar neveikia, sutvarkyk)
-                    break;
-                case 2:
-                    Console.WriteLine("Vykdoma komanda ADD");
-                    RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] + RealiMasina.memory[zodis2];
-                    break;
-                case 3:
-                    Console.WriteLine("Vykdoma komanda SUB");
-                    RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] - RealiMasina.memory[zodis2];
-                    break;
-                case 4:
-                    Console.WriteLine("Vykdoma komanda MUL");
-                    RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] * RealiMasina.memory[zodis2];
-                    break;
-                case 5:
-                    Console.WriteLine("Vykdoma komanda DIV");
-                    if (zodis2 == 0)
-                    {
-                        RealiMasina.PI = 1;
-                    }
-                    else
-                    {
-                        RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] / RealiMasina.memory[zodis2];
-                    }
-                    break;
-                case 6:
-                    Console.WriteLine("Vykdoma komanda CPM");
-                    if (RealiMasina.R1 == 0)
-                    {
-                        RealiMasina.C = 1;
-                    }
-                    if (RealiMasina.R1 < 0)
-                    {
-                        RealiMasina.C = 0;
-                    }
-                    if (RealiMasina.R1 > 0)
-                    {
-                        RealiMasina.C = 2;
-                    }
-                    break;
-                case 7:
-                    Console.WriteLine("Vykdoma komanda AND");
-                    break;
-                case 8:
-                    Console.WriteLine("Vykdoma komanda OR");
-                    break;
-                case 9:
-                    Console.WriteLine("Vykdoma komanda XOR");
-                    break;
-                case 10:
-                    Console.WriteLine("Vykdoma komanda INV");
-                    break;
-                case 11:
-                    Console.WriteLine("Vykdoma komanda JMP");
-                    break;
-                case 12:
-                    Console.WriteLine("Vykdoma komanda JL");
-                    break;
-                case 13:
-                    Console.WriteLine("Vykdoma komanda JE");
-                    break;
-                case 14:
-                    Console.WriteLine("Vykdoma komanda JNE");
-                    break;
-                case 15:
-                    Console.WriteLine("Vykdoma komanda JG");
-                    break;
-                case 16:
-                    Console.WriteLine("Vykdoma komanda GD");
-                    break;
-                case 17:
-                    Console.WriteLine("Vykdoma komanda PD");
-                    break;
-                case 18:
-                    Console.WriteLine("Vykdoma komanda GDI");
-                    break;
-                case 19:
-                    Console.WriteLine("Vykdoma komanda PDI");
-                    break;
-
-                case 100:   //Show Registers
-                    Console.WriteLine("Vykdoma komanda Show Reg");
-
-                    string allRegisters =
-                    "R1:" + RealiMasina.R1 + " R2:" + RealiMasina.R2 + " PTR:" + RealiMasina.PTR + " SI:" + RealiMasina.SI + " PI:" + RealiMasina.PI +
+			case 1:
+				Console.WriteLine("Vykdoma komanda GIV");
+				if (zodis1 > -1)
+				{
+					RealiMasina.memory[zodis1] = zodis2; //Cia GIV i rasoma i memory reiksme
+				} else {
+					Console.WriteLine("Priskiriama registro reiksme"); //Cia GIV i rasoma i registra reiksme (dabar neveikia, sutvarkyk)
+				}
+				break;
+			case 2:
+				Console.WriteLine("Vykdoma komanda ADD");
+				RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] + RealiMasina.memory[zodis2];
+				break;
+			case 3:
+				Console.WriteLine("Vykdoma komanda SUB");
+				RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] - RealiMasina.memory[zodis2];
+				break;
+			case 4:
+				Console.WriteLine("Vykdoma komanda MUL");
+				RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] * RealiMasina.memory[zodis2];
+				break;
+			case 5:
+				Console.WriteLine("Vykdoma komanda DIV");
+				if (zodis2 == 0)
+				{
+					RealiMasina.PI = 1;
+				} else {
+					RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] / RealiMasina.memory[zodis2];
+				}
+				break;
+			case 6:
+				Console.WriteLine("Vykdoma komanda CPM");
+				if (RealiMasina.R1 == 0)
+				{
+					RealiMasina.C = 1;
+				}
+				if (RealiMasina.R1 < 0)
+				{
+					RealiMasina.C = 0;
+				}
+				if (RealiMasina.R1 > 0)
+				{
+					RealiMasina.C = 2;
+				}
+				break;
+			case 7:
+				Console.WriteLine ("Vykdoma komanda AND");
+				char[] bin1 = Convert.ToString (zodis1, 2).PadLeft (4, '0').ToCharArray ();
+				char[] bin2 = Convert.ToString (zodis2, 2).PadLeft (4, '0').ToCharArray ();
+				string result = "";
+				for (int i = 0; i < bin1.Length; i++) {
+					if ((bin1 [i] == '1') && (bin2 [i] == '1')) {
+						result = result + '1';
+					} else {
+						result = result + '0';
+					}
+				}
+				int resultint = Convert.ToInt32 (result, 2);
+				RealiMasina.memory [zodis1] = resultint;
+				break;
+			case 8:
+				Console.WriteLine("Vykdoma komanda OR");
+				char[] bin1 = Convert.ToString (zodis1, 2).PadLeft (4, '0').ToCharArray ();
+				char[] bin2 = Convert.ToString (zodis2, 2).PadLeft (4, '0').ToCharArray ();
+				string result = "";
+				for (int i = 0; i < bin1.Length; i++) {
+					if ((bin1 [i] == '0') && (bin2 [i] == '0')) {
+						result = result + '0';
+					} else {
+						result = result + '1';
+					}
+				}
+				int resultint = Convert.ToInt32 (result, 2);
+				RealiMasina.memory [zodis1] = resultint;
+				break;
+			case 9:
+				Console.WriteLine("Vykdoma komanda XOR");
+				char[] bin1 = Convert.ToString (zodis1, 2).PadLeft (4, '0').ToCharArray ();
+				char[] bin2 = Convert.ToString (zodis2, 2).PadLeft (4, '0').ToCharArray ();
+				string result = "";
+				for (int i = 0; i < bin1.Length; i++) {
+					if ((bin1 [i] + bin2[i]) == '1')
+					{
+						result = result + '1';
+					} else {
+						result = result + '0';
+					}
+				}
+				int resultint = Convert.ToInt32 (result, 2);
+				RealiMasina.memory [zodis1] = resultint;
+				break;
+			case 10:
+				Console.WriteLine("Vykdoma komanda INV");
+				char[] bin = Convert.ToString (zodis1, 2).PadLeft (4, '0').ToCharArray ();
+				string result = "";
+				for (int i = 0; i < bin.Length; i++) {
+					if (bin[i] == '0') 
+					{
+						result = result + '1';
+					} else {
+						result = result + '0';
+					}
+				}
+				int resultint = Convert.ToInt32 (result, 2);
+				RealiMasina.memory [zodis1] = resultint;
+				break;
+			case 11:
+				Console.WriteLine("Vykdoma komanda JMP");
+				break;
+			case 12:
+				Console.WriteLine("Vykdoma komanda JL");
+				break;
+			case 13:
+				Console.WriteLine("Vykdoma komanda JE");
+				break;
+			case 14:
+				Console.WriteLine("Vykdoma komanda JNE");
+				break;
+			case 15:
+				Console.WriteLine("Vykdoma komanda JG");
+				break;
+			case 16:
+				Console.WriteLine("Vykdoma komanda GD");
+				break;
+			case 17:
+				Console.WriteLine("Vykdoma komanda PD");
+				break;
+			case 18:
+				Console.WriteLine("Vykdoma komanda GDI");
+				break;
+			case 19:
+				Console.WriteLine("Vykdoma komanda PDI");
+				break;
+			case 100:   //Show Registers
+				Console.WriteLine("Vykdoma komanda Show Reg");
+				string allRegisters =
+					"R1:" + RealiMasina.R1 + " R2:" + RealiMasina.R2 + " PTR:" + RealiMasina.PTR + " SI:" + RealiMasina.SI + " PI:" + RealiMasina.PI +
                     " IOI:" + RealiMasina.IOI + " C:" + RealiMasina.C + " CH1:" + RealiMasina.CH1 + " CH2:" + RealiMasina.CH2 + " CH3:" + RealiMasina.CH3 +
                     " CH4:" + RealiMasina.CH4 + " MODE:" + RealiMasina.MODE + " TI:" + RealiMasina.TI + " CS:" + RealiMasina.CS + " DS:" + RealiMasina.DS +
                     " IC:" + RealiMasina.IC;
                     System.IO.File.WriteAllText(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\RegOut.txt", allRegisters); //Cia pasikeisk, kad pas tave butu
-                    break;
-
-                case 101:   //Show Memory
-                    Console.WriteLine("Vykdoma komanda Show Memory");
-                    using (System.IO.StreamWriter file =
-                        new System.IO.StreamWriter(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\MemOut.txt")) //Cia pasikeisk, kad pas tave butu
-                    {
-                        foreach (int line in RealiMasina.memory)
-                        {
-                            file.WriteLine(line);
-                        }
-                    }
-                    break;
-
-                default:
-                    Console.WriteLine("Įvesta netinkama komanda");
-                    break;
+				break;
+			case 101:   //Show Memory
+				Console.WriteLine("Vykdoma komanda Show Memory");
+				using (System.IO.StreamWriter file =
+					new System.IO.StreamWriter(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\MemOut.txt")) //Cia pasikeisk, kad pas tave butu
+				{
+					foreach (int line in RealiMasina.memory)
+					{
+						file.WriteLine(line);
+					}
+				}
+				break;
+			default:
+				Console.WriteLine("Įvesta netinkama komanda");
+				break;
             }
             RealiMasina.TI--;
         }
