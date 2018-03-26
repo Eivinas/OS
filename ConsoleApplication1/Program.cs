@@ -5,20 +5,10 @@ namespace OS_Test2
 {
     class VirtualiMasina
     {
-        /*
-        public static int R1, R2;
-        public static byte C;
-        public static short CS, DS, IC;
-        */
         public static string CMDKomanda;
-
-
-
-
         public static void CMDRezimas()
         {
-
-            RealiMasina.MODE = 1;                                                        //Keiciami registrai
+            RealiMasina.MODE = 1;                                                        //Keiciamas registras MODE
             Console.WriteLine("Pradedama virtuali masina CMD režimu");
             CMDKomanda = Console.ReadLine();
             var kint = CMDKomanda.Split(' ');
@@ -57,10 +47,7 @@ namespace OS_Test2
         }
         public static void VRezimas()
         {
-            //CMDKomanda = Console.ReadLine();
-            //var kint = CMDKomanda.Split(' ');
-
-            RealiMasina.MODE = 1;                                                        //Keiciami registrai
+            RealiMasina.MODE = 1;                                                        //Keiciamas registras MODE
             Console.WriteLine("Pradedama virtuali masina su komandomis is failo: " + RealiMasina.FailoVardas[1]);
             string VMtext = System.IO.File.ReadAllText(@"C:\Users\Witcher\Documents\Visual Studio 2015\Projects\OS_Test2\" + RealiMasina.FailoVardas[1]);
 
@@ -89,21 +76,21 @@ namespace OS_Test2
                 case 1:
                     Console.WriteLine("Vykdoma komanda GIV");
                     if (zodis1 > -1)
-                        RealiMasina.memory[zodis1] = zodis2;
+                        RealiMasina.memory[zodis1] = zodis2; //Cia GIV i rasoma i memory reiksme
                     else
-                        Console.WriteLine("Priskiriama registro reiksme");
+                        Console.WriteLine("Priskiriama registro reiksme"); //Cia GIV i rasoma i registra reiksme (dabar neveikia, sutvarkyk)
                     break;
                 case 2:
                     Console.WriteLine("Vykdoma komanda ADD");
-                    zodis1 = zodis1 + zodis2;
+                    RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] + RealiMasina.memory[zodis2];
                     break;
                 case 3:
                     Console.WriteLine("Vykdoma komanda SUB");
-                    zodis1 = zodis1 - zodis2;
+                    RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] - RealiMasina.memory[zodis2];
                     break;
                 case 4:
                     Console.WriteLine("Vykdoma komanda MUL");
-                    zodis1 = zodis1 * zodis2;
+                    RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] * RealiMasina.memory[zodis2];
                     break;
                 case 5:
                     Console.WriteLine("Vykdoma komanda DIV");
@@ -113,7 +100,7 @@ namespace OS_Test2
                     }
                     else
                     {
-                        zodis1 = zodis1 / zodis2;
+                        RealiMasina.memory[zodis1] = RealiMasina.memory[zodis1] / RealiMasina.memory[zodis2];
                     }
                     break;
                 case 6:
@@ -171,21 +158,21 @@ namespace OS_Test2
                     Console.WriteLine("Vykdoma komanda PDI");
                     break;
 
-                case 100:
-                    Console.WriteLine("Vykdoma komanda Show Reg in Debug");
+                case 100:   //Show Registers
+                    Console.WriteLine("Vykdoma komanda Show Reg");
 
                     string allRegisters =
                     "R1:" + RealiMasina.R1 + " R2:" + RealiMasina.R2 + " PTR:" + RealiMasina.PTR + " SI:" + RealiMasina.SI + " PI:" + RealiMasina.PI +
                     " IOI:" + RealiMasina.IOI + " C:" + RealiMasina.C + " CH1:" + RealiMasina.CH1 + " CH2:" + RealiMasina.CH2 + " CH3:" + RealiMasina.CH3 +
                     " CH4:" + RealiMasina.CH4 + " MODE:" + RealiMasina.MODE + " TI:" + RealiMasina.TI + " CS:" + RealiMasina.CS + " DS:" + RealiMasina.DS +
                     " IC:" + RealiMasina.IC;
-                    System.IO.File.WriteAllText(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\RegOut.txt", allRegisters);
+                    System.IO.File.WriteAllText(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\RegOut.txt", allRegisters); //Cia pasikeisk, kad pas tave butu
                     break;
 
-                case 101:
+                case 101:   //Show Memory
                     Console.WriteLine("Vykdoma komanda Show Memory");
                     using (System.IO.StreamWriter file =
-                        new System.IO.StreamWriter(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\MemOut.txt"))
+                        new System.IO.StreamWriter(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\MemOut.txt")) //Cia pasikeisk, kad pas tave butu
                     {
                         foreach (int line in RealiMasina.memory)
                         {
@@ -210,9 +197,7 @@ namespace OS_Test2
         public static string RMKomanda, CMDKomanda, FailoVardas, allRegisters;
         public static int[] memory = new int[65536];
 
-        //public static byte[] fourBytes = new byte[4];
-
-        public static void KomandosPatikrinimas()                                      //Komandos skaitymas ir tikrinimas
+        public static void KomandosPatikrinimas()      //Komandos skaitymas ir tikrinimas
         {
             var Zodziai = RMKomanda.Split(' ');
 
@@ -220,7 +205,7 @@ namespace OS_Test2
             {
                 VirtualiMasina.CMDRezimas();
             }
-            else if (Zodziai[0] == "STARTV")
+            else if (Zodziai[0] == "STARTV")     //STARTV paskutini kart neveike dar del kazko, bet kolkas nelabai reiks
             {
                 FailoVardas = Zodziai[1];
                 VirtualiMasina.VRezimas();
@@ -248,7 +233,7 @@ namespace OS_Test2
 
         }
 
-        public static void PertraukimuTikrinimas()
+        public static void PertraukimuTikrinimas()          //Po visu pertraukimu pereinama i Realia masina (MODE = 0) ir atstatomi pertraukimu registrai
         {
             if (IOI > 0 | TI == 0 | SI > 0 | PI > 0)
             {
@@ -280,20 +265,29 @@ namespace OS_Test2
                 }
             }
         }
-        public static void Puslapiavimas()
+        public static void Puslapiavimas()      // Puslapiavimas kolkas neveikia, nezinau kaip daryt
         {
-            int min = 50;
-            int max = 100;
+            int min = RealiMasina.PTR;
+            RealiMasina.CS = 25;
+            int max = RealiMasina.PTR + (128 * 4 + RealiMasina.CS); //Vienas blokas yra 128 zodziai. 
+            RealiMasina.PTR = max;
             for (int i = min; i < max; i++)
             {
-                memory[i] = 1;
+                if (i > RealiMasina.CS )
+                {
+                    RealiMasina.memory[i] = i - RealiMasina.CS;
+                }
+                else
+                {
+                    RealiMasina.memory[i] = 1;
+                }
             }         
         }
 
         public static void Main(string[] args)
         {
             Console.WriteLine("Pradedama reali mašina");
-            while ((RMKomanda = Console.ReadLine()) != "EXIT")                //Cia visada veikia Reali masina iki EXIT
+            while ((RMKomanda = Console.ReadLine()) != "EXIT")                //Cia visada veikia Reali masina iki EXIT (mano sugalvota komanda)
             {
                 MODE = 0;
                 PTR = IC + CS;
