@@ -24,15 +24,33 @@ namespace OS_Test2
             var kint = CMDKomanda.Split(' ');
             while (kint[0] != "HALT")              //Cia visada veikia Virtuali masina iki HALT
             {
-                Console.WriteLine("Ivesta komanda:" + kint[0]);
-                RealiMasina.IC++;
-                int numVal1 = Int32.Parse(kint[0]);
-                int numVal2 = Int32.Parse(kint[1]);
-                int numVal3 = Int32.Parse(kint[2]);
-                Commands.a = numVal1;
-                Commands.Vykdom(numVal2, numVal3);
-                CMDKomanda = Console.ReadLine();
-                kint = CMDKomanda.Split(' ');
+                if (kint.Length > 2)
+                {
+                    Console.WriteLine("Ivesta komanda:" + kint[0]);
+                    RealiMasina.IC++;
+                    int numVal1 = Int32.Parse(kint[0]);
+                    int numVal2 = Int32.Parse(kint[1]);
+                    int numVal3 = Int32.Parse(kint[2]);
+                    Commands.a = numVal1;
+                    RealiMasina.IOI = 1;
+                    RealiMasina.CH1 = 1;
+                    Commands.Vykdom(numVal2, numVal3);
+                    RealiMasina.CH1 = 0;
+                    RealiMasina.IOI = 0;
+
+                    RealiMasina.PertraukimuTikrinimas();
+                    CMDKomanda = Console.ReadLine();
+                    kint = CMDKomanda.Split(' ');
+                }
+                else {
+                    Console.WriteLine("Įvesta per mažai argumentų");
+                    RealiMasina.IC++;
+                    RealiMasina.PI = 1;
+                    RealiMasina.PertraukimuTikrinimas();
+                }
+                if (RealiMasina.MODE == 0) {
+                    kint[0] = "HALT";
+                }
 
             }
             Console.WriteLine("Vistuali masina sustabdoma");
@@ -161,13 +179,13 @@ namespace OS_Test2
                     " IOI:" + RealiMasina.IOI + " C:" + RealiMasina.C + " CH1:" + RealiMasina.CH1 + " CH2:" + RealiMasina.CH2 + " CH3:" + RealiMasina.CH3 +
                     " CH4:" + RealiMasina.CH4 + " MODE:" + RealiMasina.MODE + " TI:" + RealiMasina.TI + " CS:" + RealiMasina.CS + " DS:" + RealiMasina.DS +
                     " IC:" + RealiMasina.IC;
-                    System.IO.File.WriteAllText(@"C:\Users\eivgai\Documents\visual studio 2015\Projects\ConsoleApplication1\ConsoleApplication1\RegOut.txt", allRegisters);
+                    System.IO.File.WriteAllText(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\RegOut.txt", allRegisters);
                     break;
 
                 case 101:
                     Console.WriteLine("Vykdoma komanda Show Memory");
                     using (System.IO.StreamWriter file =
-                        new System.IO.StreamWriter(@"C:\Users\eivgai\Documents\visual studio 2015\Projects\ConsoleApplication1\ConsoleApplication1\MemOut.txt"))
+                        new System.IO.StreamWriter(@"C:\Users\eivgai\Documents\Visual Studio 2015\Projects\OS\MemOut.txt"))
                     {
                         foreach (int line in RealiMasina.memory)
                         {
@@ -209,7 +227,23 @@ namespace OS_Test2
             }
             else
             {
-                Console.WriteLine("Įvesta netinkama komanda");
+                if (Zodziai.Length > 2)
+                {
+                    Console.WriteLine("Ivesta komanda:" + Zodziai[0]);
+                    RealiMasina.IC++;
+                    int numVal1 = Int32.Parse(Zodziai[0]);
+                    int numVal2 = Int32.Parse(Zodziai[1]);
+                    int numVal3 = Int32.Parse(Zodziai[2]);
+                    Commands.a = numVal1;
+                    Commands.Vykdom(numVal2, numVal3);
+                }
+                else
+                {
+                    Console.WriteLine("Įvesta per mažai argumentų");
+                    RealiMasina.IC++;
+                    RealiMasina.PI = 1;
+                    RealiMasina.PertraukimuTikrinimas();
+                }
             }
 
         }
@@ -222,30 +256,49 @@ namespace OS_Test2
                 if (IOI > 0)
                 {
                     Console.WriteLine("IOI > 0");
+                    RealiMasina.MODE = 0;
+                    RealiMasina.IOI = 0;
                 }
                 if (TI == 0)
                 {
                     Console.WriteLine("TI = 0");
+                    RealiMasina.MODE = 0;
+                    RealiMasina.TI = 0;
                 }
                 if (SI > 0)
                 {
                     Console.WriteLine("SI > 0");
+                    RealiMasina.MODE = 0;
+                    RealiMasina.SI = 0;
+
                 }
                 if (PI > 0)
                 {
                     Console.WriteLine("PI > 0");
+                    RealiMasina.MODE = 0;
+                    RealiMasina.PI = 0;
                 }
             }
+        }
+        public static void Puslapiavimas()
+        {
+            int min = 50;
+            int max = 100;
+            for (int i = min; i < max; i++)
+            {
+                memory[i] = 1;
+            }         
         }
 
         public static void Main(string[] args)
         {
+            Console.WriteLine("Pradedama reali mašina");
             while ((RMKomanda = Console.ReadLine()) != "EXIT")                //Cia visada veikia Reali masina iki EXIT
             {
-                PTR = IC + CS;
                 MODE = 0;
+                PTR = IC + CS;
                 PertraukimuTikrinimas();
-                //Vykdomas puslapiavimas
+                Puslapiavimas();
                 KomandosPatikrinimas();
                 PertraukimuTikrinimas();
                 TI--;
